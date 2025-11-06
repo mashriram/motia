@@ -1,3 +1,4 @@
+import type { NestExpressApplication } from '@nestjs/platform-express'
 import type { Express } from 'express'
 import type { LockedData } from './locked-data'
 import type { LoggerFactory } from './logger-factory'
@@ -17,6 +18,7 @@ export type Motia = {
   queueManager: QueueManager
 
   app: Express
+  nestApp?: NestExpressApplication
   stateAdapter: StateAdapter
 }
 

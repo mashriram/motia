@@ -184,6 +184,16 @@ module.exports = { config, handler };
 
 **[Learn more about Steps →](https://motia.dev/docs/concepts/steps/steps)**
 
+### 🤖 First-Class LangChain and LangGraph Support
+
+Motia now includes first-class support for LangChain and LangGraph, allowing you to build powerful AI agents and workflows with ease.
+
+-   **Seamless Integration:** Use LangChain and LangGraph with your existing Motia Steps.
+-   **NestJS and FastAPI Compatible:** Build your AI agents with the frameworks you already know and love.
+-   **Event-Driven:** Trigger your LangGraphs from any Motia event.
+
+**[Learn more about LangChain and LangGraph support →](https://motia.dev/docs/langchain)**
+
 [![Motia combines APIs, background queues, and AI agents into one system](assets/github-readme-banner.gif)](https://motia.dev)
 
 ## 💻 Remix your own Motia App in Replit
