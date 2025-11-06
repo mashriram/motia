@@ -7,6 +7,7 @@ def on_event(rpc: RpcSender, topic: str):
         async def wrapper(*args, **kwargs):
             return await func(*args, **kwargs)
 
+        rpc.register_callback(topic, wrapper)
         rpc.send_no_wait("subscribe", {"topic": topic})
 
         return wrapper

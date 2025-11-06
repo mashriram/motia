@@ -116,5 +116,11 @@ if __name__ == "__main__":
     fastapi_thread.daemon = True
     fastapi_thread.start()
 
-    tasks = asyncio.gather(rpc.init(), run_python_module(file_path, rpc, args))
+    async def handle_events():
+        while True:
+            event = await rpc.receive()
+            if event['topic'] in rpc.callbacks:
+                await rpc.callbacks[event['topic']](event['data'])
+
+    tasks = asyncio.gather(rpc.init(), run_python_module(file_path, rpc, args), handle_events())
     loop.run_until_complete(tasks)

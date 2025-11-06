@@ -194,6 +194,16 @@ Motia now includes first-class support for LangChain and LangGraph, allowing you
 
 **[Learn more about LangChain and LangGraph support →](https://motia.dev/docs/langchain)**
 
+### 🚀 Introducing the LangGraph Superset Framework
+
+Motia now includes a powerful LangGraph superset framework for building asynchronous, non-sequential chat systems.
+
+-   **Asynchronous Chat:** Build agents that can provide an immediate response, continue working on a long-running task, and then notify the user when the real answer is ready.
+-   **Support for MCP and UTCP:** Use the Model Context Protocol (MCP) and the Universal Tool Calling Protocol (UTCP) to interact with a wide range of tools and services.
+-   **Independent and Extensible:** The framework is an independent part of the library, so you can use it on its own or extend it to meet your needs.
+
+**[Learn more about the LangGraph Superset Framework →](https://motia.dev/docs/langgraph-superset)**
+
 [![Motia combines APIs, background queues, and AI agents into one system](assets/github-readme-banner.gif)](https://motia.dev)
 
 ## 💻 Remix your own Motia App in Replit
