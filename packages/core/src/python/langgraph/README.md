@@ -29,6 +29,7 @@ async def start_graph(data: dict):
     workflow.add_node("start", lambda x: print("Graph started!"))
     workflow.add_node("end", lambda x: print("Graph finished!"))
     workflow.add_edge("start", "end")
+    workflow.set_entry_point("start")
     app = workflow.compile()
     await app.invoke({})
     await event_emitter.emit("graph_finished", {"status": "success"})
@@ -36,11 +37,11 @@ async def start_graph(data: dict):
 
 ## Decorators
 
-### `@on_event(app, topic)`
+### `@on_event(rpc_sender, topic)`
 
 The `@on_event` decorator allows you to define a function that will be called when a Motia event is received.
 
-*   `app`: The FastAPI application instance.
+*   `rpc_sender`: The `RpcSender` instance.
 *   `topic`: The name of the Motia event to listen for.
 
 ## EventEmitter

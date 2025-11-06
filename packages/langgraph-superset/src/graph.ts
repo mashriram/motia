@@ -21,8 +21,14 @@ export class AsyncGraph implements Graph {
     })
 
     this.graph.addNode('start', this.handleStart.bind(this))
-    this.graph.setEntryPoint('start' as any)
-    this.graph.setFinishPoint('start' as any)
+    this.graph.addNode('tool_result', this.handleToolResult.bind(this))
+    this.graph.addEdge(START, 'start')
+    this.graph.addConditionalEdges('start', (x: any) => (x.result ? 'tool_result' : END), {
+      tool_result: 'tool_result',
+      [END]: END,
+    })
+    this.graph.addEdge('tool_result', END)
+    this.graph.setEntryPoint(START)
   }
 
   async processEvent(event: Event): Promise<Event> {
@@ -56,14 +62,14 @@ export class AsyncGraph implements Graph {
       const tools = await this.toolCaller.getTools()
       if (tools.length > 0) {
         const result = await tools[0].invoke(data)
-        return { value: result }
+        return { value: 'tool_result', result }
       }
     }
-    // In a real-world scenario, you would have a more complex graph
-    // with multiple nodes and edges.
-    console.log('Graph started!')
-    // Simulate a long-running task
-    await new Promise((resolve) => setTimeout(resolve, 5000))
-    return { value: 'end' }
+    return { value: '__end__' }
+  }
+
+  private async handleToolResult(data: any): Promise<any> {
+    console.log('Tool result:', data.result)
+    return { value: '__end__' }
   }
 }

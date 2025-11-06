@@ -14,6 +14,7 @@ async def start_graph(data: dict):
     workflow.add_node("start", lambda x: print("Graph started!"))
     workflow.add_node("end", lambda x: print("Graph finished!"))
     workflow.add_edge("start", "end")
+    workflow.set_entry_point("start")
     app = workflow.compile()
     await app.invoke({})
     await event_emitter.emit("graph_finished", {"status": "success"})
