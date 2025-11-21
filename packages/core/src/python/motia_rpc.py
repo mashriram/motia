@@ -21,6 +21,11 @@ class RpcSender:
     
     def __init__(self):
         self._communication: Union[RpcCommunication, IpcCommunication] = create_communication()
+        self.callbacks = {}
+
+    def register_callback(self, topic: str, callback: Any) -> None:
+        """Register a callback for a topic"""
+        self.callbacks[topic] = callback
         
     def send_no_wait(self, method: str, args: Any) -> None:
         """Send request without waiting for response"""
@@ -33,6 +38,10 @@ class RpcSender:
     async def init(self) -> None:
         """Initialize communication"""
         return await self._communication.init()
+
+    async def receive(self) -> Any:
+        """Receive message"""
+        return await self._communication.receive()
 
     def close(self) -> None:
         """Close communication"""

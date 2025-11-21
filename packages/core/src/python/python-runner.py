@@ -4,12 +4,15 @@ import importlib.util
 import os
 import asyncio
 import traceback
+import threading
+import uvicorn
 from typing import Callable, List, Dict
 from motia_rpc import RpcSender
 from motia_context import Context
 from motia_middleware import compose_middleware
 from motia_rpc_stream_manager import RpcStreamManager
 from motia_dot_dict import DotDict
+from fastapi_server import app as fastapi_app
 
 def parse_args(arg: str) -> Dict:
     """Parse command line arguments into HandlerArgs"""
@@ -104,5 +107,20 @@ if __name__ == "__main__":
     asyncio.set_event_loop(loop)
 
     args = parse_args(arg) if arg else None
-    tasks = asyncio.gather(rpc.init(), run_python_module(file_path, rpc, args))
+
+    # Start FastAPI in a separate thread
+    def run_fastapi():
+        uvicorn.run(fastapi_app, host="0.0.0.0", port=8000)
+
+    fastapi_thread = threading.Thread(target=run_fastapi)
+    fastapi_thread.daemon = True
+    fastapi_thread.start()
+
+    async def handle_events():
+        while True:
+            event = await rpc.receive()
+            if event['topic'] in rpc.callbacks:
+                await rpc.callbacks[event['topic']](event['data'])
+
+    tasks = asyncio.gather(rpc.init(), run_python_module(file_path, rpc, args), handle_events())
     loop.run_until_complete(tasks)

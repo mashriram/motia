@@ -62,6 +62,20 @@ class RpcCommunication:
 
         return await future
 
+    async def receive(self) -> Dict[str, Any]:
+        """Receive message from Node.js"""
+        loop = asyncio.get_event_loop()
+        line = await loop.run_in_executor(None, sys.stdin.readline)
+        if not line:
+            return {}
+        line = line.strip()
+        if not line:
+            return {}
+        try:
+            return json.loads(line)
+        except json.JSONDecodeError:
+            return {}
+
     def _handle_message(self, msg: Dict[str, Any]) -> None:
         """Handle incoming message from Node.js"""
         msg_type = msg.get('type')
